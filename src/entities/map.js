@@ -99,14 +99,14 @@ map = {
         // hash: key is coordinates (eg. "x, y" and value is tile data)
         this.data = {};
 
+        this.path = null;
+
         for (var y = 0; y < this.heightInTiles; y++) {
             for (var x = 0; x < this.widthInTiles; x++) {
                 this.data[this.getKey(x, y)] = new tileData(x, y);
             }
         }
     },
-
-    seed: '',
 
     // for now, we'll just use the current timestamp.
     newSeed: function() {
@@ -121,6 +121,49 @@ map = {
         console.log('The seed is: "' + this.seed.toString() + '".');
 
         return this;
+    },
+
+    getPath: function() {
+        if (this.path === null) {
+            this.path = this.findPath();
+        }
+        return this.path;
+    },
+
+    findPath: function() {
+        var grid = [];
+        var subGrid;
+        var tile;
+        var open;
+
+        // generate two dimensional grid representing the map
+        for (y = 0; y < this.heightInTiles; y++) {
+            subGrid = [];
+            for (x = 0; x < this.widthInTiles; x++) {
+                tile = map.getTile(x, y);
+                if (tile.contents == 'DangerTile' || tile.walkable == false) {
+                    block = 1;
+                } else {
+                    block = 0;
+                }
+
+                subGrid.push(block);
+            }
+            grid.push(subGrid);
+        }
+
+        // this is where the pathfinding magic happens
+        var matrix = new PF.Grid(grid);
+
+        var finder = new PF.AStarFinder();
+        // path is an array of movement coordinates, such as: [[0, 0], [1, 0], [2, 0], [2, 1]]
+        var path = finder.findPath(this.playerEntity.tile.x, this.playerEntity.tile.y, this.winGate.x, this.winGate.y, matrix);
+
+        return path;
+    },
+
+    getMoveLimit: function() {
+        return this.getPath().length;
     },
 
     getRandomTile: function(isWinGate) {
@@ -141,8 +184,8 @@ map = {
                 // check if tile is empty
                 isTileOccupied = newTile.contents != '';
             } else {
-                var diffY = Math.abs(tileY - this.playerTile.y);
-                var diffX = Math.abs(tileX - this.playerTile.x);
+                var diffY = Math.abs(tileY - this.playerEntity.tile.y);
+                var diffX = Math.abs(tileX - this.playerEntity.tile.x);
 
                 var distance = diffY + diffX;
 

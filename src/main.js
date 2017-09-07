@@ -7,7 +7,7 @@ Game = {
 
     levelNumber: 1,
 
-    start: function() {
+    makeLevel: function() {
         // Game world is whatever fits on-screen
         Crafty.init(Game.view.width, Game.view.height);
         Crafty.background('black');
@@ -15,22 +15,45 @@ Game = {
         map.init(config("level").widthInTiles, config("level").heightInTiles);
 
         Crafty.e("Level").loadMap(map);
-        var playerEntity = Crafty.e("Player").placeInRandomTile();
 
-        map.playerTile = playerEntity.tile;
-        map.getRandomTile(true).setWinGate();
+        var playerEntity = Crafty.e("Player").placeInRandomTile();
+        map.playerEntity = playerEntity;
+
+        var winGate = map.getRandomTile(true).setWinGate();
+        map.winGate = winGate;
 
         var dangerTilesNo = Game.levelNumber * config('dangerTilesPerLevel');
-
         for (var i = 0; i < dangerTilesNo; i++) {
             map.getRandomTile().setDangerTile();
         }
 
         var switchGateNo = Math.floor((Game.levelNumber/2) + 1) * config('switchGatesPerLevel');
-
         for (var i = 0; i < switchGateNo; i++) {
             var switchGate = map.getRandomTile().setSwitchGate();
             map.getRandomTile().setSwitch(switchGate);
+        }
+
+        var path = map.getPath();
+        if (path.length == 0) {
+            debugger;
+        }
+        return path.length == 0;
+    },
+
+    start: function() {
+        if (config('noUnsolvableLevels')) {
+            var unsolvable = true;
+            while (unsolvable) {
+                unsolvable = Game.makeLevel();
+            }
+        } else {
+            Game.makeLevel();
+        }
+
+        if (config('limitedMoves')) {
+            var moveCounter = Crafty.e('MoveCounter');
+            map.playerEntity.setMoveCounter(moveCounter);
+            map.playerEntity.setMoveLimit(map.getMoveLimit());
         }
         
         if (config('timerSeconds') != 0) {
