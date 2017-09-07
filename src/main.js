@@ -34,9 +34,6 @@ Game = {
         }
 
         var path = map.getPath();
-        if (path.length == 0) {
-            debugger;
-        }
         return path.length == 0;
     },
 
