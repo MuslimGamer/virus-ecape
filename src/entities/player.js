@@ -20,6 +20,23 @@ Crafty.c('Player', {
         } else if (tileType == 'Switch' && newTile.isOn == true) { 
             newTile.activate();
         }
+
+        if (config('limitedMoves')) {
+            this.moves -= 1;
+            this.moveCounter.setMoves(this.moves);
+            if (this.moves < 1) {
+                Game.loseLevel();
+            }
+        }
+    },
+
+    setMoveCounter: function(moveCounter) {
+        this.moveCounter = moveCounter;
+    },
+
+    setMoveLimit: function(moveLimit) {
+        this.moves = moveLimit + config('extraMoves');
+        this.moveCounter.setMoves(this.moves);
     },
 
     moving: function(e) {

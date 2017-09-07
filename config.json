@@ -9,11 +9,15 @@ externs = {
     "padding": 8,
     "timerSeconds": 10, // set to 0 to disable
 
+    "limitedMoves": false, // dynamically calculated based on level
+    "extraMoves": 3, // gets added to dynamically calculated moveLimit
+    "noUnsolvableLevels": false, // if true, uses pathfinding to regenerate unsolvable levels. still buggy; use with caution
+
     "dangerTilesPerLevel": 1, // multiplier for danger tiles. increment sparingly. zero to disable
     "switchGatesPerLevel": 1, // multiplier for switch gates. increment sparingly. zero to disable
 
     "walkedTileSetting": "open", // open: walkable more than once. closed: walkable once - not deadly. closed-deadly: walkable once - deadly
-    "mapSeed": "1531171161", // seed for generating the map
+    "mapSeed": "", // seed for generating the map
 
     "minDistanceToGate": 3, // how many movements, at minimum, between the player and WinGate
 
