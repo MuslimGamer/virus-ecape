@@ -72,7 +72,7 @@ map = {
             var tileY = Math.floor(Srand.random() * config('level').heightInTiles);
             var newTile = map.getTile(tileX, tileY);
 
-            if (tileType == '' || tileType == 'Player') {
+            if (typeof(tileType) == 'undefined' || tileType == 'Player') {
                 // check if tile is empty
                 isTileOccupied = newTile.contents != '' || newTile.entity != '';
             } else {
