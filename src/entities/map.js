@@ -42,7 +42,8 @@ map = {
         var grid = this.getGrid();
         var finder = new PF.AStarFinder();
 
-        return finder.findPath(startX, startY, this.playerTile.x, this.playerTile.y, grid);
+        var path = finder.findPath(startX, startY, this.playerTile.x, this.playerTile.y, grid);
+        return path;
     },
 
     // generate a grid representing the map, with 1 as blocked, and 0 as walkable
@@ -53,7 +54,7 @@ map = {
             for (var x = this.roomPathWidth; x < this.roomWidth + this.roomPathWidth; x++) {
                 if (this.data.hasOwnProperty(this.getKey(x, y))) {
                     var tile = this.getTile(x, y);
-                    if (tile.contents != '') {
+                    if (tile.contents != '' || typeof (tile) == 'undefined') {
                         grid.setWalkableAt(x, y, false);
                     }
                 }
