@@ -46,7 +46,7 @@ Crafty.c('Player', {
 
         this.moveTo(newTile);
 
-        if (config('allowAntiVirusEntities')) {
+        if (config('antiVirusesPerLevel') > 0) {
             this.antiVirusMovePoints += 1;
             if (this.antiVirusMovePoints > config('antiVirusMovementCost')) {
                 this.antiVirusMovePoints = 0;

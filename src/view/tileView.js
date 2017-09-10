@@ -8,7 +8,7 @@ Crafty.c('Tile', {
     addNumberTag: function (number) {
         Crafty.e('Text2')
               .fontSize(config('tileSize') / 2)
-            .move(this.x + config('padding'), this.y + config('padding'))
-            .text(number);
+              .move(this.x + config('padding'), this.y + config('padding'))
+              .text(number);
     }
 });

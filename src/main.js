@@ -11,14 +11,14 @@ Game = {
         // Game world is whatever fits on-screen
         Crafty.init(Game.view.width, Game.view.height);
         Crafty.background('black');
-        
-        map.init(config("level").widthInTiles, config("level").heightInTiles);
+
+        map.init(config("level"), Game.levelNumber);
         Crafty.e("Level").loadMap(map);
 
-        var playerEntity = Crafty.e("Player").placeInRandomTile('Player');
+        var playerEntity = Crafty.e("Player").moveTo(map.getStartTile());
         map.playerTile = playerEntity.tile;
 
-        map.getRandomTile('WinGate').setWinGate();
+        map.getEndTile().setWinGate();
 
         var dangerTilesNo = Math.floor(Game.levelNumber * config('dangerTilesPerLevel'));
         for (var i = 0; i < dangerTilesNo; i++) {
@@ -46,6 +46,11 @@ Game = {
             map.getRandomTile().setWallTile();
         }
 
+        var numAntiViruses = Math.floor(Game.levelNumber * config('antiVirusesPerLevel'));
+        for (i = 0; i < numAntiViruses; i++) {
+            Crafty.e('AntiVirus').placeInRandomTile('AntiVirus');
+        }
+
         if (config('limitedMoves')) {
             playerEntity.setMoveCounter(Crafty.e('MoveCounter'));
             playerEntity.setMoveLimit(map.getMoveLimit());
@@ -53,13 +58,6 @@ Game = {
 
         if (config('playerHealth') > 0) {
             playerEntity.setHealthCounter(Crafty.e('HealthCounter'));
-        }
-
-        if (config('allowAntiVirusEntities')) {
-            var numAntiViruses = Math.floor(Game.levelNumber * config('antiVirusesPerLevel'));
-            for (i = 0; i < numAntiViruses; i++) {
-                Crafty.e('AntiVirus').placeInRandomTile('AntiVirus');
-            }
         }
 
         if (config('timerSeconds') > 0) {
