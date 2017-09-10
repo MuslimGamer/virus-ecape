@@ -1,16 +1,39 @@
 // "Model" data: doesn't know anything about the view, CraftyJS, etc.
 map = {
-    init: function(widthInTiles, heightInTiles, levelNumber) {
-        this.widthInTiles = widthInTiles;
-        this.heightInTiles = heightInTiles;
+    init: function(level, levelNumber) {
+        this.roomHeight = level.roomHeight;
+        this.roomWidth = level.roomWidth;
+
+        this.roomPathHeight = level.roomPathHeight;
+        this.roomPathWidth = level.roomPathWidth;
+
+        this.heightInTiles = this.roomHeight;
+        this.widthInTiles = this.roomWidth + this.roomPathWidth * 2;
+
         this.levelNumber = levelNumber;
 
         // hash: key is coordinates (eg. "x, y" and value is tile data)
         this.data = {};
 
-        for (var y = 0; y < this.heightInTiles; y++) {
-            for (var x = 0; x < this.widthInTiles; x++) {
+        // generate room itself
+        for (var x = this.roomPathWidth; x < this.roomWidth + this.roomPathWidth; x++) {
+            for (var y = 0; y < this.roomHeight; y++) {
                 this.data[this.getKey(x, y)] = new tileData(x, y);
+            }
+        }
+
+        if (this.roomHeight % 2 == 0) {
+            var middleRow = Math.floor(this.roomHeight / 2) - 1;
+        } else {
+            var middleRow = Math.floor(this.roomHeight / 2)
+        }
+
+        // generate path
+        for (var x = 0; x < (this.roomPathWidth * 2) + this.roomWidth; x++) {
+            for (var y = middleRow; y < middleRow + this.roomPathHeight; y++) {
+                if (typeof(this.getTile(x, y)) == 'undefined') {
+                    this.data[this.getKey(x, y)] = new tileData(x, y);
+                }
             }
         }
     },
@@ -24,14 +47,15 @@ map = {
 
     // generate a grid representing the map, with 1 as blocked, and 0 as walkable
     getGrid: function () {
-        var grid = new PF.Grid(this.widthInTiles, this.heightInTiles);
+        var grid = new PF.Grid(this.roomWidth + this.roomPathWidth, this.roomHeight);
 
-        for (var y = 0; y < this.heightInTiles; y++) {
-            for (var x = 0; x < this.widthInTiles; x++) {
-                var tile = map.getTile(x, y);
-
-                if (tile.contents != '') {
-                    grid.setWalkableAt(x, y, false);
+        for (var y = 0; y < this.roomHeight; y++) {
+            for (var x = this.roomPathWidth; x < this.roomWidth + this.roomPathWidth; x++) {
+                if (this.data.hasOwnProperty(this.getKey(x, y))) {
+                    var tile = this.getTile(x, y);
+                    if (tile.contents != '') {
+                        grid.setWalkableAt(x, y, false);
+                    }
                 }
             }
         }
@@ -54,6 +78,32 @@ map = {
         return this;
     },
 
+    getStartTile: function () {
+        var x = 0;
+        var y = 0;
+        while (typeof (tile) == 'undefined') {
+            var tile = this.getTile(x, y);
+            y++;
+        }
+        return tile;
+    },
+
+    getEndTile: function () {
+        var x = 0;
+        for (var key in this.data) {
+            var tileThingy = this.data[key];
+            if (tileThingy.x > x) {
+                x = tileThingy.x
+            }
+        }
+        var y = 0;
+        while (typeof (tile) == 'undefined') {
+            var tile = this.getTile(x, y);
+            y++;
+        }
+        return tile;
+    },
+
     getMoveLimit: function() {
         var diffY = Math.abs(this.winGate.y - this.playerTile.y);
         var diffX = Math.abs(this.winGate.x - this.playerTile.x);
@@ -68,8 +118,8 @@ map = {
         // get random x, y coordinates to get a random tile
         // https://stackoverflow.com/a/4550514
         while (isTileOccupied || isTooClose) {
-            var tileX = Math.floor(Srand.random() * config('level').widthInTiles);
-            var tileY = Math.floor(Srand.random() * config('level').heightInTiles);
+            var tileX = Math.floor(Srand.random() * this.roomWidth) + this.roomPathWidth;
+            var tileY = Math.floor(Srand.random() * this.roomHeight);
             var newTile = map.getTile(tileX, tileY);
 
             if (typeof(tileType) == 'undefined' || tileType == 'Player') {

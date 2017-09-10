@@ -1,8 +1,10 @@
 externs = {
   "level": {
     // size in tiles
-    "widthInTiles": 19,
-    "heightInTiles": 9
+    "roomHeight": 7,
+    "roomWidth": 8,
+    "roomPathHeight": 1,
+    "roomPathWidth": 2
   },
 
   "tileSize": 64, // tiles are 32x32px
@@ -16,9 +18,8 @@ externs = {
   "dangerDamage": 5,
   "antiVirusDamage": 5,
 
-  "allowAntiVirusEntities": true,
-  "antiVirusMovementCost": 2,
   "antiVirusesPerLevel": 1,
+  "antiVirusMovementCost": 2,
 
   "allowTileScanning": {
     "firstStage": true,
@@ -38,16 +39,16 @@ externs = {
   "allowWeakDangerTile": true,
   "allowInvincibleDangerTile": true,
   
-  "wallTilesPerLevel": 5,
+  "wallTilesPerLevel": 1,
   "dangerTilesPerLevel": 1, // multiplier for danger tiles. increment sparingly. zero to disable
-  "switchGatesPerLevel": 5, // multiplier for switch gates. increment sparingly. zero to disable
+  "switchGatesPerLevel": 1, // multiplier for switch gates. increment sparingly. zero to disable
 
   "walkedTileSetting": "open", // (open): walkable more than once | (closed): walkable once - not deadly.
   "walkedTileByAntiVirus": "closed", // (closed-damaging): walkable once - damaging | (closed-deadly): walkable once - deadly
 
   "mapSeed": "", // seed for generating the map
 
-  "minDistanceToGate": 10, // how many movements, at minimum, between the player and WinGate
+  "minDistanceToGate": 5, // how many movements, at minimum, between the player and WinGate
 
   "switchGatesBefore": {
     "tileType": "WallTile"
