@@ -9,7 +9,7 @@ Crafty.c('GameOverTimer', {
         var now = Date.now();
         var delta = Math.round((now - this.prevDate)/1000);
         this.timerSeconds -= delta;
-        this.text(this.timerSeconds.toString());
+        this.text("Time Left: " + this.timerSeconds.toString());
         if (this.timerSeconds < 0) {
             Game.loseLevel();
         }
@@ -19,7 +19,7 @@ Crafty.c('GameOverTimer', {
     startTimer: function() {
         this.prevDate = Date.now();
         this.timerSeconds = config('timerSeconds');
-        this.text(this.timerSeconds.toString());
+        this.text("Time Left: " + this.timerSeconds.toString());
         this.repeatedly(this.timerTick, 1);
 
         return this;

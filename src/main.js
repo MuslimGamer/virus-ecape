@@ -220,9 +220,13 @@ Game = {
         }
 
         if (config('timerSeconds') > 0) {
-            Crafty.e('GameOverTimer').startTimer();
+            var timer = Crafty.e('GameOverTimer');
+            timer.startTimer();
+            timer.move(18 * 32 - timer.w - 8, 8);
         }
 
+        var floorIndicator = Crafty.e("Text2").textColor("white").text("Level " + (Game.levelNumber + 1));
+        floorIndicator.move(18 * 32 - floorIndicator.w - 8, 40);
     },
 
     preStart: function () {
