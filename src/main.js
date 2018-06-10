@@ -49,13 +49,6 @@ Game = {
                 });
             }
 
-            function tutorialCallBack() {
-                Crafty('TitleScreen').each(function () {
-                    this.tween({ alpha: 0.0 }, 500);
-                });
-                Game.tutorial();
-            }
-
             Crafty.e('Button, TitleScreen')
                   .setCallBack(newGameCallBack)
                   .size(config('buttonWidth'), config('buttonHeight'))
@@ -63,22 +56,9 @@ Game = {
                   .move(Game.view.width / 2, Game.view.height / 2)
                   .z = z;
 
-            Crafty.e('Button, TitleScreen')
-                  .setCallBack(tutorialCallBack)
-                  .size(config('buttonWidth'), config('buttonHeight'))
-                  .text('Tutorial')
-                  .move(Game.view.width / 2, Game.view.height / 2 + config('buttonHeight') + config('padding'))
-                  .z = z;
         }, function (e) {
             loadingPercent.text("Loading... " + e.percent + "%");
         });
-    },
-
-    tutorial: function () {
-        Crafty.e('Actor, Tutorial')
-              .move(Game.view.width / 16, Game.view.height / 16)
-              .color('grey')
-              .size(Game.view.width / 1.2, Game.view.height / 1.2);
     },
 
     start: function () {
@@ -255,10 +235,20 @@ Game = {
 
     loseLevel: function () {
         Crafty.audio.play('death');
-        console.log('You died at level ' + Game.levelNumber.toString() + "!");
-        Game.levelNumber = 1;
-        this.cleanUp();
-        this.preStart();
+        Crafty("Player").die();
+
+        var blackout = Crafty.e("Actor").size(Game.view.width, Game.view.height).color("black");
+        blackout.alpha = 0.5;
+        var self = this;
+
+        blackout.click(function() {
+            self.cleanUp();
+            self.preStart();
+        });
+
+        var t = this.showTransientText('You died at level ' + Game.levelNumber.toString() + "!");
+        var t2 = Crafty.e("Text2").fontSize(32).textColor("white").text("Click anywhere to restart.");        
+        t2.y = t.y + t.h + 32;
     },
 
     cleanUp: function() {
@@ -267,6 +257,13 @@ Game = {
         for (var i = 0; i < everything.length; i++) {
             Crafty(everything[i]).die();
         }
+    },
+
+    showTransientText: function(text) {
+        var t = Crafty.e("Text2").text(text).fontSize(72).textColor('white');
+        //t.attr({ x: (Game.view.width - t.w) / 2, y: (Game.view.height - t.h ) / 2});
+        t.attr({ y: (Game.view.height - t.h ) / 2});
+        return t;
     }
 };
 
