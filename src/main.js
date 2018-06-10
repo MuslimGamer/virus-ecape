@@ -250,6 +250,8 @@ Game = {
         var blackout = Crafty.e("Actor").size(Game.view.width, Game.view.height).color("black");
         blackout.alpha = 0.5;
         var self = this;
+        var timerId = Crafty("GameOverTimer")[0];
+        Crafty(timerId).die();
 
         blackout.click(function() {
             self.cleanUp();
