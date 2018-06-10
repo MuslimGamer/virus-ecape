@@ -3,7 +3,7 @@ Crafty.c('HealthCounter', {
     init: function() {
         this.requires('Text2')
             .textColor('white')
-            .move(130, 0);
+            .move(8, 8);
     },
 
     setHealth: function(healthLeft) {

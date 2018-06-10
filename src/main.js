@@ -38,6 +38,11 @@ Game = {
                   .z = z;
 
             function newGameCallBack() {
+                var allTexts = Crafty("Text2");
+                for (var i = 0; i < allTexts.length; i++) {
+                    Crafty(allTexts[i]).die();
+                }
+
                 Crafty('TitleScreen').each(function () {
                     this.tween({ alpha: 0.0 }, 500);
                 });
@@ -49,11 +54,12 @@ Game = {
                 });
             }
 
+            Crafty.e("Text2").fontSize(72).textColor("white").move(16, 16).text("Virus Escape");
             Crafty.e('Button, TitleScreen')
                   .setCallBack(newGameCallBack)
                   .size(config('buttonWidth'), config('buttonHeight'))
                   .text('Start game')
-                  .move(Game.view.width / 2, Game.view.height / 2)
+                  .move(128, 128)
                   .z = z;
 
         }, function (e) {

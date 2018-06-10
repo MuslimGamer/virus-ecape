@@ -2,6 +2,7 @@
     init: function () {
         this.requires('Actor, Mouse, Text2')
             .color('blue')
+            .fontSize(32)
             .bind('MouseUp', this.buttonClick);
     },
 
