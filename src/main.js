@@ -225,7 +225,7 @@ Game = {
             timer.move(18 * 32 - timer.w - 8, 8);
         }
 
-        var floorIndicator = Crafty.e("Text2").textColor("white").text("Level " + (Game.levelNumber + 1));
+        var floorIndicator = Crafty.e("Text2").textColor("white").text("Level " + Game.levelNumber);
         floorIndicator.move(18 * 32 - floorIndicator.w - 8, 40);
     },
 
@@ -256,7 +256,8 @@ Game = {
             self.preStart();
         });
 
-        var t = this.showTransientText('You died at level ' + Game.levelNumber.toString() + "!");
+        var t= Crafty.e("Text2").fontSize(60).textColor('white').text('You died at level ' + Game.levelNumber.toString() + "!");
+        t.move(0, (Game.view.height - t.h) / 2);
         var t2 = Crafty.e("Text2").fontSize(32).textColor("white").text("Click anywhere to restart.");        
         t2.y = t.y + t.h + 32;
     },
@@ -267,13 +268,6 @@ Game = {
         for (var i = 0; i < everything.length; i++) {
             Crafty(everything[i]).die();
         }
-    },
-
-    showTransientText: function(text) {
-        var t = Crafty.e("Text2").text(text).fontSize(72).textColor('white');
-        //t.attr({ x: (Game.view.width - t.w) / 2, y: (Game.view.height - t.h ) / 2});
-        t.attr({ y: (Game.view.height - t.h ) / 2});
-        return t;
     }
 };
 
