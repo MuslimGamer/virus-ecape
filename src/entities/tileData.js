@@ -1,3 +1,10 @@
+FLOOR_COLOUR = 'black';
+WALL_COLOUR = '#000088';
+DANGER_COLOUR = 'red';
+WEAK_DANGER_COLOUR = 'orange';
+SWITCH_COLOUR = 'cyan';
+GATE_COLOUR = 'blue';
+
 // tile data class constructor
 function tileData(x, y) {
     this.tileData = {
@@ -18,20 +25,20 @@ function tileData(x, y) {
             switch (footPrint) {
                 case "closed":
                     this.contents = 'WallTile';
-                    this.view.color('silver');
+                    this.view.color(WALL_COLOUR);
                     break;
                 case "closed-damaging":
                     this.contents = 'WeakDangerTile';
-                    this.view.color('#FF6969'); // pink
+                    this.view.color(WEAK_DANGER_COLOUR); // pink
                     break;
                 case "closed-deadly":
                     this.contents = 'StrongDangerTile';
-                    this.view.color('red');
+                    this.view.color(DANGER_COLOUR);
                     break;
                 default:
                     if (config('allowDisablingWeakDangerTiles')) {
                         this.contents = '';
-                        this.view.color('blue')
+                        this.view.color(FLOOR_COLOUR)
                     }
                     break;
             }
@@ -44,7 +51,7 @@ function tileData(x, y) {
         },
 
         resetTile: function () {
-            this.view.color('blue');
+            this.view.color(FLOOR_COLOUR);
             this.contents = '';
 
             return this;
@@ -57,14 +64,14 @@ function tileData(x, y) {
         },
 
         setWeakDangerTile: function() {
-            this.view.color('#FF6969'); // pink
+            this.view.color(WEAK_DANGER_COLOUR); // pink
             this.contents = 'WeakDangerTile';
 
             return this;
         },
 
         setStrongDangerTile: function() {
-            this.view.color('red');
+            this.view.color(DANGER_COLOUR);
             this.contents = 'StrongDangerTile';
 
             return this;
@@ -78,7 +85,7 @@ function tileData(x, y) {
         },
 
         setSwitch: function(switchGate) {
-            this.view.color('aqua');
+            this.view.color(SWITCH_COLOUR);
             this.contents = 'Switch';
             this.isOn = true;
             this.switchGate = switchGate;
@@ -96,14 +103,14 @@ function tileData(x, y) {
             this.isOn = false;
             this.view.color('aqua', 0.5);
             this.contents = '';
-            this.switchGate.view.color('purple', 0.5);
+            this.switchGate.view.color(GATE_COLOUR, 0.5);
             this.switchGate.contents = config('switchGatesAfter').tileType;
 
             return this;
         },
 
         setSwitchGate: function(numberTag) {
-            this.view.color('purple');
+            this.view.color(GATE_COLOUR);
             this.contents = config('switchGatesBefore').tileType;
             this.numberTag = numberTag;
             this.view.addNumberTag(this.numberTag);
@@ -126,7 +133,7 @@ function tileData(x, y) {
                     this.contents = config('scanTile').thirdEffect;
                     break;
                 case 4:
-                    this.view.color('blue');
+                    this.view.color(FLOOR_COLOUR);
                     this.contents = '';
                     break;
             }
@@ -136,7 +143,7 @@ function tileData(x, y) {
         },
 
         setWallTile: function() {
-            this.view.color('silver');
+            this.view.color(WALL_COLOUR);
             this.contents = 'WallTile';
 
             return this;

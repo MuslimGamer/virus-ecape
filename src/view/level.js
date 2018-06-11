@@ -1,10 +1,13 @@
+GRID_COLOUR = '#000088';
+FLOOR_COLOUR = 'black';
+
 // Level: the thing you see on the screen. Uses a map for data.
 Crafty.c('Level', {
     init: function() {
         var paddedWidth = config("tileSize") + config("padding");
         var paddedHeight = config("tileSize") + config("padding");
         this.requires("Actor")
-            .color("#000088")
+            .color(GRID_COLOUR)
             .size(config("level").widthInTiles * paddedWidth, config("level").heightInTiles * paddedHeight);
 
         for (var key in config('allowTileScanning')) {
@@ -43,7 +46,7 @@ Crafty.c('Level', {
                 // make a Crafty tile and add the data class properties to it using .tile
                 var mapTile = Crafty.e('Tile')
                                     .move(x * (tileSize + config("padding")), y * (tileSize + config("padding")))
-                                    .color("blue");
+                                    .color(FLOOR_COLOUR);
 
                 // map the Crafty tile to the map object, instead of the normal data class.
                 tileData.setView(mapTile);
