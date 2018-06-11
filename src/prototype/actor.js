@@ -3,7 +3,7 @@
 Crafty.c('Actor', {
   init: function() {
     // Collision: every actor can be collision-detected
-    this.requires('Common, Color, Collision')
+    this.requires('2D, Common, Color, Collision')
       .size(32, 32)
       .color("#888888");
 
@@ -93,8 +93,10 @@ Crafty.c('Actor', {
       return this.h;
   },
 
+  // Broken. use this instead:
+  // Crafty.e("2D, DOM, Image").image("resources/images/tutorial.png");
   img: function(filename, repeat) {
-    this.requires('Image');
+    this.requires('2D, DOM, Image');
     this.image(filename, repeat);
     return this;
   },

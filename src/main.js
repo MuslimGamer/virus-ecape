@@ -13,7 +13,7 @@ Game = {
         Crafty.background('black');
 
         // set resources folders
-        Crafty.paths({ audio: 'resources/sounds/' });
+        Crafty.paths({ audio: 'resources/sounds/', images: 'resources/images/' });
         var loadingPercent = Crafty.e('Text2');
 
         loadingPercent.move(Game.view.width / 2, Game.view.height / 2)
@@ -26,16 +26,17 @@ Game = {
                 'win': 'levelComplete.wav',
                 'switchActivate': 'lock.wav',
                 'hurt': 'hurt.wav'
-            }
+            },
+            "images": ["tutorial.png"]
         }, function () {
             loadingPercent.die();
 
-            var z = 2;
+            //var z = 2;
 
             Crafty.e('Actor, TitleScreen')
                   .size(Game.view.width, Game.view.height)
-                  .color('black')
-                  .z = z;
+                  .color('black');
+                  //.z = z;
 
             function newGameCallBack() {
                 var allTexts = Crafty("Text2");
@@ -46,6 +47,7 @@ Game = {
                 Crafty('TitleScreen').each(function () {
                     this.tween({ alpha: 0.0 }, 500);
                 });
+                
                 Game.preStart();
                 this.after(1, function () {
                     Crafty('TitleScreen').each(function () {
@@ -54,17 +56,36 @@ Game = {
                 });
             }
 
-            Crafty.e("Text2").fontSize(72).textColor("white").move(16, 16).text("Virus Escape");
-            Crafty.e('Button, TitleScreen')
+            function tutorialCallback() {
+                var self = Crafty.e("2D, DOM, Image, Mouse").image("resources/images/tutorial.png");
+                self.x = (576 - self.w) / 2;
+                self.y = (576 - self.h) / 2;                
+                self.bind("MouseUp", function() {
+                    self.destroy();
+                });
+            }
+
+            var titleText = Crafty.e("Text2").fontSize(72).textColor("white").move(16, 16).text("Virus Escape");
+
+            var startButton = Crafty.e('Button, TitleScreen')
                   .setCallBack(newGameCallBack)
                   .size(config('buttonWidth'), config('buttonHeight'))
                   .text('Start game')
-                  .move(128, 128)
-                  .z = z;
+                  .move(128, 128);
+                  //.z = z;
 
-        }, function (e) {
+            var tutorialButton = Crafty.e('Button, TitleScreen')
+                .setCallBack(tutorialCallback)
+                .size(config('buttonWidth'), config('buttonHeight'))
+                .text('Tutorial')
+                .move(150, 192);
+                //.z = z;
+
+        }, function (e) { // loading
             loadingPercent.text("Loading... " + e.percent + "%");
-        });
+        }), function(e) { // error
+            console.log(e);
+        }
     },
 
     start: function () {
@@ -82,12 +103,12 @@ Game = {
         function removeAllInstancesFromArray(array, x, y) {
             while (isInArray(array, x, y)) {
                 for (var i = 0; i < array.length; i++) {
-                var coords = array[i];
-                if (coords[0] == x && coords[1] == y) {
-                    array.splice(i, 1);
-                    break;
+                    var coords = array[i];
+                    if (coords[0] == x && coords[1] == y) {
+                        array.splice(i, 1);
+                        break;
+                    }
                 }
-            }
             }
         }
         
