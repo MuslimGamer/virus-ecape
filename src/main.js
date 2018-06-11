@@ -274,7 +274,8 @@ Game = {
         var timerId = Crafty("GameOverTimer")[0];
         Crafty(timerId).die();
 
-        blackout.click(function() {
+        blackout.click(function() {   
+            Game.levelNumber = 1;         
             self.cleanUp();
             self.preStart();
         });
